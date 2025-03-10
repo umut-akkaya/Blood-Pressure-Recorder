@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@utility container {
+    margin: auto;
+}
+@layer base {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+}
+
+@theme{
+    --shadow-custom:0 0 0 0.2rem rgba(0, 90, 125, 0.25);
+}
