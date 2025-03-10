@@ -112,5 +112,5 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-// Export for Vercel serverless deployment
-module.exports.handler = serverless(app);
+module.exports = app;
+
