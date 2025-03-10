@@ -65,7 +65,7 @@ export default function ShowTension() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://blood-pressure-recorder.vercel.app/data");
+            const response = await axios.get("https://blood-pressure-recorder.vercel.app/api/data");
             setArray(response.data);
         } catch (error) {
             console.error("Veri Çekme Hatası:", error);
