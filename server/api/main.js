@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const corsOptions = {
-    origin: "https://save-tension.vercel.app",
+    origin: "https://blood-pressure-recorder.vercel.app",
 }
 
 app.use(cors(corsOptions));
