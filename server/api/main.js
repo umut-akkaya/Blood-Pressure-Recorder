@@ -7,6 +7,8 @@ const corsOptions = {
     origin: "https://blood-pressure-recorder.vercel.app",
 }
 
+const serverless = require("serverless-http");
+
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -111,4 +113,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Export for Vercel serverless deployment
-module.exports = app;
+module.exports.handler = serverless(app);
