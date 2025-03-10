@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   build: {
-    outDir: 'dist', // Vercel'in algılaması için dist olarak ayarla
+    outDir: 'build', // Vercel'in algılaması için dist olarak ayarla
   },
 });
