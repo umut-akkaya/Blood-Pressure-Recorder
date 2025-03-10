@@ -99,6 +99,6 @@ app.put("/data/:id", async (req, res) => {
     }
 })
 
-app.listen(3000, () => {
+app.listen(process.env.NEXT_PUBLIC_API_URL,() => {
     console.log("Server started on port 3000");
 })
