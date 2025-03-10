@@ -99,6 +99,16 @@ app.put("/data/:id", async (req, res) => {
     }
 })
 
-app.listen(process.env.NEXT_PUBLIC_API_URL,() => {
-    console.log("Server started on port 3000");
-})
+// app.listen(process.env.NEXT_PUBLIC_API_URL,() => {
+//     console.log("Server started on port 3000");
+// })
+
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT}`);
+    });
+}
+
+// Export for Vercel serverless deployment
+module.exports = app;
