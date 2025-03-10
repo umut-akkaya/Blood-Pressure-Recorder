@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: "https://save-tension.vercel.app",
 }
 
 app.use(cors(corsOptions));
