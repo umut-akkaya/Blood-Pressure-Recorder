@@ -30,14 +30,14 @@
 //
 // // GET, POST, DELETE, PUT
 //
-// app.get("/data", async (req, res) => {
-//     try {
-//         const tensions = await Tension.find()
-//         res.json(tensions)
-//     } catch (error) {
-//         res.status(500).json({message: error.message})
-//     }
-// })
+app.get("/data", async (req, res) => {
+    try {
+        const tensions = await Tension.find()
+        res.json(tensions)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
 //
 // app.post("/data", async (req, res) => {
 //     try {

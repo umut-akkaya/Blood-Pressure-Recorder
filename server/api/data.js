@@ -31,5 +31,14 @@ app.post("/api/data", async (req, res) => {
     }
 });
 
+app.get("/data", async (req, res) => {
+    try {
+        const tensions = await Tension.find()
+        res.json(tensions)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
+
 // Vercel için Handler
 module.exports = app;
