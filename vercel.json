@@ -20,7 +20,7 @@
       "dest": "server/api/index.js"
     },
     {
-      "source": "/(.*)",
+      "src": "/(.*)",
       "dest": "client/dist/index.html"
     }
   ]
