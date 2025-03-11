@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const corsOptions = {
     origin: "http://localhost:5173",
+    origin:"https://blood-pressure-recorder.vercel.app",
 }
 
 const serverless = require("serverless-http");
@@ -104,3 +105,5 @@ app.put("/data/:id", async (req, res) => {
 app.listen(3000,() => {
     console.log("Server started on port 3000");
 })
+module.exports = app;
+module.exports.handler = serverless(app);
