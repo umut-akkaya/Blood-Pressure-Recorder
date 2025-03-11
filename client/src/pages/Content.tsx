@@ -39,7 +39,7 @@ const Content = () => {
 
         try {
             // Make the POST request to save the data
-            await axios.post("https://pressure-recorder.vercel.app/data", {
+            await axios.post("/data", {
                 bigTension: bigTensionNum,
                 smallTension: smallTensionNum,
             });
