@@ -108,39 +108,54 @@
 // module.exports = app;
 // module.exports.handler = serverless(app);
 
+// server/api/main.js
 const express = require("express");
-require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 
+// Express app oluştur
 const app = express();
 
-const corsOptions = {
-    origin: ["http://localhost:5173", "https://blood-pressure-recorder.vercel.app"],
+// CORS ayarları
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-};
+    optionsSuccessStatus: 200
+}));
 
-app.use(cors(corsOptions));
+// JSON body parser
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// MongoDB bağlantısı
+let isConnected = false;
+const connectToDatabase = async () => {
+    if (isConnected) return;
+
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        isConnected = true;
+        console.log('MongoDB connected');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+    }
+};
 
 // Model
 const tensionSchema = new mongoose.Schema({
     bigTension: Number,
     smallTension: Number,
 });
-const Tension = mongoose.model("Tension", tensionSchema);
+const Tension = mongoose.models.Tension || mongoose.model("Tension", tensionSchema);
 
-// API Routes
-const router = express.Router();
-
-router.get("/data", async (req, res) => {
+// Rotalar
+app.get("/api/data", async (req, res) => {
     try {
+        await connectToDatabase();
         const tensions = await Tension.find();
         res.json(tensions);
     } catch (error) {
@@ -148,8 +163,9 @@ router.get("/data", async (req, res) => {
     }
 });
 
-router.post("/save-tension", async (req, res) => {
+app.post("/api/save-tension", async (req, res) => {
     try {
+        await connectToDatabase();
         const { bigTension, smallTension } = req.body;
         const newTension = new Tension({ bigTension, smallTension });
         await newTension.save();
@@ -159,9 +175,9 @@ router.post("/save-tension", async (req, res) => {
     }
 });
 
-// Delete
-router.delete("/data/:id", async (req, res) => {
+app.delete("/api/data/:id", async (req, res) => {
     try {
+        await connectToDatabase();
         const { id } = req.params;
         if (!id || !mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: "Geçersiz ID" });
@@ -176,7 +192,7 @@ router.delete("/data/:id", async (req, res) => {
     }
 });
 
-app.use("/api", router);
-
-module.exports = app;
-
+// Tüm istekler için handler
+module.exports = (req, res) => {
+    app(req, res);
+};

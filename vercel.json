@@ -2,23 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/api/main.js",
+      "src": "server/main.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/server/api/main.js"
+      "dest": "server/main.js"
+    },
+    {
+      "src": "/(assets|images|favicon)/(.*)",
+      "dest": "/$1/$2"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/index.html"
     }
   ]
 }
