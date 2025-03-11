@@ -7,6 +7,6 @@ export default defineConfig({
     plugins: [react(), tailwindcss(),],
     base: '/',
     build: {
-        outDir: 'client/dist', // Vercel'in algılaması için dist olarak ayarla
+        outDir: 'dist', // Vercel'in algılaması için dist olarak ayarla
     },
 });
