@@ -112,7 +112,6 @@ const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const serverless = require("serverless-http");
 
 const app = express();
 
@@ -178,4 +177,4 @@ router.delete("/data/:id", async (req, res) => {
 app.use("/api", router);
 
 module.exports = app;
-module.exports.handler = serverless(app);
+
