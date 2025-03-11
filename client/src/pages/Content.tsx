@@ -39,7 +39,7 @@ const Content = () => {
 
         try {
             // Make the POST request to save the data
-            await axios.post("/api/save-tension", {
+            await axios.post("http://localhost:3000/data", {
                 bigTension: bigTensionNum,
                 smallTension: smallTensionNum,
             });

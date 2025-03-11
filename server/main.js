@@ -1,198 +1,113 @@
-// const express = require("express");
-// require("dotenv").config();
-// const app = express();
-// const mongoose = require("mongoose");
-// const cors = require("cors");
-// const corsOptions = {
-//     origin: "http://localhost:5173",
-//     origin:"https://blood-pressure-recorder.vercel.app",
-// }
-//
-// const serverless = require("serverless-http");
-//
-// app.use(cors(corsOptions));
-// app.use(express.json());
-//
-// mongoose.connect(process.env.MONGODB_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// });
-//
-// const tensionSchema = new mongoose.Schema({
-//     bigTension: Number,
-//     smallTension: Number,
-// })
-//
-// const Tension = mongoose.model("Tension", tensionSchema);
-//
-// app.get("/data", async (req, res) => {
-//     try {
-//         const tensions = await Tension.find()
-//         res.json(tensions)
-//     } catch (error) {
-//         res.status(500).json({error: "Hata"})
-//     }
-// })
-//
-// app.post("/save-tension", async (req, res) => {
-//     try {
-//         const {bigTension, smallTension} = req.body;
-//         const newTension = new Tension({bigTension, smallTension});
-//         await newTension.save();
-//         res.json({message: "Successfully Saved Tension"})
-//     } catch (error) {
-//         res.status(500).json({error: "Hata"})
-//     }
-// })
-//
-// app.delete("/data/:id", async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//
-//         // Log the received ID
-//         console.log("Delete request received for ID:", id);
-//
-//         if (!id) {
-//             return res.status(400).json({ error: "ID gerekli" });
-//         }
-//
-//         // Check if ID is in valid MongoDB format
-//         if (!mongoose.Types.ObjectId.isValid(id)) {
-//             console.error("Invalid MongoDB ID format:", id);
-//             return res.status(400).json({ error: "Geçersiz ID formatı" });
-//         }
-//
-//         // Changed newTension to Tension here
-//         const deletedTension = await Tension.findByIdAndDelete(id);
-//
-//         if (!deletedTension) {
-//             console.log("No document found with ID:", id);
-//             return res.status(404).json({ error: "Kayıt bulunamadı" });
-//         }
-//
-//         console.log("Successfully deleted document with ID:", id);
-//         res.json({ message: "Successfully Deleted Tension", deletedItem: deletedTension });
-//     } catch (error) {
-//         console.error("Server error during delete operation:", error);
-//         res.status(500).json({ error: "Sunucu hatası", details: error.message });
-//     }
-// });
-//
-// app.put("/data/:id", async (req, res) => {
-//     try{
-//         const {id} = req.params;
-//         if(!id) {
-//             return res.status(400).json({ error: "ID gerekli" });
-//         }
-//
-//         if(!mongoose.Types.ObjectId.isValid(id)) {
-//             return res.status(400).json({ error: "Geçersiz ID formatı" });
-//         }
-//
-//         const updatedTension = await Tension.findByIdAndUpdate(id, req.body, {new:true})
-//
-//         if(!updatedTension) {
-//             return res.status(404).json({ error: "Kayıt bulunamadı" });
-//         }
-//         res.json({ message: "Successfully Updated Tension", updatedItem: updatedTension });
-//     }
-//     catch (error) {
-//         console.error("Server error during delete operation:", error);
-//         res.status(500).json({ error: "Sunucu hatası", details: error.message });
-//     }
-// })
-//
-// app.listen(3000,() => {
-//     console.log("Server started on port 3000");
-// })
-// module.exports = app;
-// module.exports.handler = serverless(app);
-
-// server/api/main.js
 const express = require("express");
+require("dotenv").config();
+const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+const corsOptions = {
+    origin: "http://localhost:5173",
+}
 
-// Express app oluştur
-const app = express();
-
-// CORS ayarları
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-    optionsSuccessStatus: 200
-}));
-
-// JSON body parser
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// MongoDB bağlantısı
-let isConnected = false;
-const connectToDatabase = async () => {
-    if (isConnected) return;
+// Connect database
 
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        isConnected = true;
-        console.log('MongoDB connected');
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-    }
-};
+mongoose.connect("mongodb+srv://melihkaratas1281:hfniUSCUfE4WmFvu@cluster0.lgsvk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
-// Model
+// Schema
+
 const tensionSchema = new mongoose.Schema({
     bigTension: Number,
     smallTension: Number,
-});
-const Tension = mongoose.models.Tension || mongoose.model("Tension", tensionSchema);
+})
 
-// Rotalar
-app.get("/api/data", async (req, res) => {
+const Tension = mongoose.model("Tension", tensionSchema);
+
+
+// GET, POST, DELETE, PUT
+
+app.get("/data", async (req, res) => {
     try {
-        await connectToDatabase();
-        const tensions = await Tension.find();
-        res.json(tensions);
+        const tensions = await Tension.find()
+        res.json(tensions)
     } catch (error) {
-        res.status(500).json({ error: "Hata" });
+        res.status(500).json({message: error.message})
     }
-});
+})
 
-app.post("/api/save-tension", async (req, res) => {
+app.post("/data", async (req, res) => {
     try {
-        await connectToDatabase();
-        const { bigTension, smallTension } = req.body;
-        const newTension = new Tension({ bigTension, smallTension });
+        const {bigTension, smallTension} = req.body;
+        const newTension = new Tension({bigTension, smallTension});
         await newTension.save();
-        res.json({ message: "Successfully Saved Tension" });
+        res.json({message: "Successfully Saved Tension"})
     } catch (error) {
-        res.status(500).json({ error: "Hata" });
+        console.log(error.message);
+        res.status(500).json({message: error.message})
     }
-});
+})
 
-app.delete("/api/data/:id", async (req, res) => {
+app.delete("/data/:id", async (req, res) => {
     try {
-        await connectToDatabase();
         const { id } = req.params;
-        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Geçersiz ID" });
+
+        // Log the received ID
+        console.log("Delete request received for ID:", id);
+
+        if (!id) {
+            return res.status(400).json({ error: "ID gerekli" });
         }
+
+        // Check if ID is in valid MongoDB format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.error("Invalid MongoDB ID format:", id);
+            return res.status(400).json({ error: "Geçersiz ID formatı" });
+        }
+
+        // Changed newTension to Tension here
         const deletedTension = await Tension.findByIdAndDelete(id);
+
         if (!deletedTension) {
+            console.log("No document found with ID:", id);
             return res.status(404).json({ error: "Kayıt bulunamadı" });
         }
+
+        console.log("Successfully deleted document with ID:", id);
         res.json({ message: "Successfully Deleted Tension", deletedItem: deletedTension });
     } catch (error) {
+        console.error("Server error during delete operation:", error);
         res.status(500).json({ error: "Sunucu hatası", details: error.message });
     }
 });
 
-// Tüm istekler için handler
-module.exports = (req, res) => {
-    app(req, res);
-};
+app.put("/data/:id", async (req, res) => {
+    try{
+        const {id} = req.params;
+        if(!id) {
+            return res.status(400).json({ error: "ID gerekli" });
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: "Geçersiz ID formatı" });
+        }
+
+        const updatedTension = await Tension.findByIdAndUpdate(id, req.body, {new:true})
+
+        if(!updatedTension) {
+            return res.status(404).json({ error: "Kayıt bulunamadı" });
+        }
+        res.json({ message: "Successfully Updated Tension", updatedItem: updatedTension });
+    }
+    catch (error) {
+        console.error("Server error during delete operation:", error);
+        res.status(500).json({ error: "Sunucu hatası", details: error.message });
+    }
+})
+
+app.listen(3000,() => {
+    console.log("Server started on port 3000");
+})
+
