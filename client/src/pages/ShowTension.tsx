@@ -20,7 +20,7 @@ export default function ShowTension() {
     const updateTension = async () => {
         if (!editId) return;
         try {
-            const response = await fetch(`http://localhost:3000/data/${editId}`, {
+            const response = await fetch(`https://pressure-recorder.vercel.app//data/${editId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -49,7 +49,7 @@ export default function ShowTension() {
 
         try {
             setLoading(true);
-            const response = await axios.delete(`http://localhost:3000/data/${id}`);
+            const response = await axios.delete(`https://pressure-recorder.vercel.app/data/${id}`);
 
             if (response.status === 200) {
                 fetchData();
@@ -65,7 +65,7 @@ export default function ShowTension() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("http://localhost:3000/data");
+            const response = await axios.get("https://pressure-recorder.vercel.app/data");
             setArray(response.data);
         } catch (error) {
             console.error("Veri Çekme Hatası:", error);
