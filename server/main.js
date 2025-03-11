@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const corsOptions = {
     origin: "http://localhost:5173",
+    origin:"https://pressure-recorder.vercel.app"
 }
 
 app.use(cors(corsOptions));
