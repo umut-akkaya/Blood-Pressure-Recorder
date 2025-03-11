@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const corsOptions = {
-    origin: "https://blood-pressure-recorder.vercel.app",
+    origin: "http://localhost:5173",
 }
 
 const serverless = require("serverless-http");
@@ -12,7 +12,7 @@ const serverless = require("serverless-http");
 app.use(cors(corsOptions));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect("mongodb+srv://melihkaratas1281:hfniUSCUfE4WmFvu@cluster0.lgsvk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -101,16 +101,6 @@ app.put("/data/:id", async (req, res) => {
     }
 })
 
-// app.listen(process.env.NEXT_PUBLIC_API_URL,() => {
-//     console.log("Server started on port 3000");
-// })
-
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server started on port ${PORT}`);
-    });
-}
-
-module.exports = app;
-
+app.listen(3000,() => {
+    console.log("Server started on port 3000");
+})
