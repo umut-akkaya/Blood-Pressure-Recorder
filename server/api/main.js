@@ -118,7 +118,7 @@ const app = express();
 const corsOptions = {
     origin: ["http://localhost:5173", "https://blood-pressure-recorder.vercel.app"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 };
 
 app.use(cors(corsOptions));
