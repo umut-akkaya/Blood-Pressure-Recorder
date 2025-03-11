@@ -62,7 +62,7 @@ const tensionSchema = new mongoose.Schema({
 const Tension = mongoose.model("Tension", tensionSchema);
 
 // POST Endpoint (Veri Ekle)
-router.post("/data", async (req, res) => {
+router.post("/api/data", async (req, res) => {
     try {
         const { bigTension, smallTension } = req.body;
         const newTension = new Tension({ bigTension, smallTension });
@@ -75,7 +75,7 @@ router.post("/data", async (req, res) => {
 });
 
 // GET Endpoint (Veri Al)
-router.get("/data", async (req, res) => {
+router.get("/api/data", async (req, res) => {
     try {
         const tensions = await Tension.find();
         return res.json(tensions);
